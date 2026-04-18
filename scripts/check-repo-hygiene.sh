@@ -37,6 +37,16 @@ readme_mentions_entry() {
   fi
 }
 
+tracked_top_level_entries() {
+  local root=$1
+
+  git ls-files "$root/*" | awk -F/ -v root="$root" '
+    index($0, root "/") == 1 && NF >= 2 {
+      print $1 "/" $2
+    }
+  ' | LC_ALL=C sort -u
+}
+
 check_agents_index() {
   local readme='agents/README.md'
   local agent_file=''
@@ -54,7 +64,7 @@ check_agents_index() {
       fail "agents index README is missing \`$entry_name\`: $readme"
       missing=1
     fi
-  done < <(find agents -mindepth 1 -maxdepth 1 -type f -name '*.toml' | LC_ALL=C sort)
+  done < <(git ls-files 'agents/*.toml' | LC_ALL=C sort)
 
   if ((missing == 0)); then
     pass "agents/README.md covers every tracked agent"
@@ -78,7 +88,7 @@ check_hooks_index() {
       fail "hooks index README is missing \`$entry_name\`: $readme"
       missing=1
     fi
-  done < <(find hooks -mindepth 1 -maxdepth 1 ! -name '.DS_Store' ! -name 'README.md' ! -name '__pycache__' ! -name '.*' | LC_ALL=C sort)
+  done < <(tracked_top_level_entries hooks | grep -vE '^hooks/(\.DS_Store|README\.md|__pycache__)$|^hooks/\.' || true)
 
   if ((missing == 0)); then
     pass "hooks/README.md covers every tracked hook entry"
@@ -98,7 +108,7 @@ check_skill_shape() {
       fail "skill is missing README.md: $skill_dir"
       missing=1
     fi
-  done < <(find skills -mindepth 1 -maxdepth 1 -type d ! -name '.*' | LC_ALL=C sort)
+  done < <(tracked_top_level_entries skills | grep -vE '^skills/(README\.md|\.)' || true)
 
   if ((missing == 0)); then
     pass "every tracked custom skill has SKILL.md and README.md"
@@ -122,7 +132,7 @@ check_skills_index() {
       fail "skills index README is missing \`$entry_name\`: $readme"
       missing=1
     fi
-  done < <(find skills -mindepth 1 -maxdepth 1 -type d ! -name '.*' | LC_ALL=C sort)
+  done < <(tracked_top_level_entries skills | grep -vE '^skills/(README\.md|\.)' || true)
 
   if ((missing == 0)); then
     pass "skills/README.md covers every tracked skill"
