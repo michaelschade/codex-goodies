@@ -129,9 +129,10 @@ check_skill_shape() {
 
   while IFS= read -r skill_dir; do
     [[ -f "$skill_dir/SKILL.md" ]] || fail "skill is missing SKILL.md: $skill_dir"
+    [[ -f "$skill_dir/README.md" ]] || fail "skill is missing README.md: $skill_dir"
   done < <(find skills -mindepth 1 -maxdepth 1 -type d ! -name '.*' | LC_ALL=C sort)
 
-  pass "every tracked custom skill has a SKILL.md entrypoint"
+  pass "every tracked custom skill has SKILL.md and README.md"
 }
 
 check_skills_index() {

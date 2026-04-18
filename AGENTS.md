@@ -36,6 +36,7 @@ When the current repository is `codex-goodies`:
 - Do not hardcode local home paths like `/Users/...` or `/home/...` in synced files. Use `$CODEX_HOME` or `~/.codex` forms instead.
 - Keep hooks thin. If behavior starts depending on semantic prompt parsing or hidden workflow logic, move the fix to a better surface.
 - Keep `agents/README.md`, `hooks/README.md`, and `skills/README.md` current. Adding, removing, or renaming a top-level runtime entry under `agents/`, `hooks/`, or `skills/` requires updating the matching README and rerunning `bin/install --user` from the dotfiles checkout on each consuming machine so dotfiles can refresh the link map.
+- Keep each skill directory's `README.md` current as well. It should explain the use cases and user-visible value of that skill without duplicating the full `SKILL.md`.
 - Use topic branches for changes. Do not push straight to `main`.
 - Run `scripts/check-public-safety.sh` before opening or updating a pull request.
 - Keep commits focused and informative. The commit message should say which shared surface changed and why that change is safe to publish.
