@@ -1,11 +1,11 @@
 # Prompt Writing
 
-This skill matters when the work is genuinely about prompt quality: writing a strong prompt from scratch, repairing a prompt after a specific failure mode, or tightening a prompt so it fits the runtime that will actually use it.
+Use this when the wording itself matters, or when you need help proving the next fix should not be another prompt edit.
 
-## Why You Might Care
-
-- Use it when you need a system prompt, developer prompt, reusable task prompt, or tool-using prompt that fits a real runtime instead of the authoring session.
-- Use it when an existing prompt mostly works and you want the smallest high-leverage edits rather than a full rewrite.
-- Use it when you want prompt guidance that stays focused on wording, structure, context, and caller contract.
+- **Make the instruction carry the work.** In the hook repair pass, prompt-writing did not redesign the system. It removed the `"In this projectless Codex workspace"` lead-in and rewrote the injected text so only the behavior-changing parts remained: delegation is allowed, what kind of task qualifies, and who keeps ownership.
+- **Stop death by a thousand prompt edits.** When a system keeps missing the point, this skill helps you step back, cut the noise, and decide whether the next fix belongs in the prompt or somewhere else.
+- **Turn a dense brief into an execution contract.** In recent codex-meta work, that meant splitting a one-block refresh prompt into sections for goal, cheap change detection, source priority, bounded subagent use, and done-when.
+- **Write for the runtime, not the authoring chat.** Use it when the same task might run in a skill, automation, or `codex exec` job and you need the prompt to work there instead of quietly depending on chat-only context.
+- **Keep the strong parts and delete the rest.** The point is not to rewrite everything. It is to preserve the lines that are already pulling their weight and remove everything that is just scene-setting or repeated caveats.
 
 If you want the operational rules, checklists, and scaffolds, jump to [`SKILL.md`](SKILL.md).
