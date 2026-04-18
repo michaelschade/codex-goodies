@@ -6,6 +6,7 @@ cd "$ROOT_DIR"
 
 failures=0
 SCAN_PATHS=(AGENTS.md CONTRIBUTING.md README.md agents hooks hooks.json skills .github docs scripts)
+MODE=auto
 
 fail() {
   printf '[FAIL] %s\n' "$1" >&2
@@ -61,6 +62,10 @@ search_paths_secret_regex() {
   fi
 }
 
+staged_paths() {
+  git diff --cached --name-only --diff-filter=ACMR
+}
+
 current_tracked_paths() {
   local path=''
 
@@ -71,160 +76,170 @@ current_tracked_paths() {
   done < <(git ls-files)
 }
 
-check_tracked_path_banlist() {
+scope_mode() {
+  local staged=''
+
+  case "$MODE" in
+    staged|tracked)
+      printf '%s\n' "$MODE"
+      return 0
+      ;;
+  esac
+
+  staged=$(staged_paths)
+  if [[ -n "$staged" ]]; then
+    printf 'staged\n'
+  else
+    printf 'tracked\n'
+  fi
+}
+
+scope_paths() {
+  local mode=$1
+
+  if [[ "$mode" == 'staged' ]]; then
+    staged_paths
+  else
+    current_tracked_paths
+  fi
+}
+
+cached_grep_paths() {
+  local pattern=$1
+
+  shift
+
+  git grep --cached -nI -E "$pattern" -- "$@" 2>/dev/null || true
+}
+
+cached_grep_paths_secret() {
+  local pattern=$1
+
+  shift
+
+  cached_grep_paths "$pattern" "$@" | grep -v '^scripts/check-public-safety.sh:' || true
+}
+
+check_path_banlist() {
+  local mode=$1
   local banned=''
 
-  banned=$(current_tracked_paths | search_stream_regex '(^|/)(auth\.json|session_index\.jsonl|models_cache\.json|installation_id|version\.json|\.codex-global-state\.json|.*\.sqlite(-shm|-wal)?|.*\.db|.*\.db-shm|.*\.db-wal|.*\.bak|.*\.orig|.*~|bak-skill\.md)$|(^|/)(archived_sessions|automations|cache|generated_images|log|memories|sessions|shell_snapshots|sqlite)/|^codex-home(/|$)|^skills/(\.system|codex-primary-runtime)(/|$)')
+  banned=$(scope_paths "$mode" | search_stream_regex '(^|/)(auth\.json|session_index\.jsonl|models_cache\.json|installation_id|version\.json|\.codex-global-state\.json|.*\.sqlite(-shm|-wal)?|.*\.db|.*\.db-shm|.*\.db-wal|.*\.bak|.*\.orig|.*~|bak-skill\.md)$|(^|/)(archived_sessions|automations|cache|generated_images|log|memories|sessions|shell_snapshots|sqlite)/|^codex-home(/|$)|^skills/(\.system|codex-primary-runtime)(/|$)')
   if [[ -n "$banned" ]]; then
-    fail "tracked files or directories from local Codex state are present:"
+    fail "$mode scope includes tracked files or directories from local Codex state:"
     printf '%s\n' "$banned" >&2
   else
-    pass "no banned local-state paths are tracked"
+    pass "no banned local-state paths were found in the $mode scope"
   fi
 }
 
 check_absolute_home_paths() {
+  local mode=$1
   local matches=''
+  local -a paths=()
+  local path=''
 
-  matches=$(search_paths_regex '/Users/[A-Za-z0-9_-][^[:space:]"]+|/home/[A-Za-z0-9_-][^[:space:]"]+' "${SCAN_PATHS[@]}")
+  if [[ "$mode" == 'tracked' ]]; then
+    matches=$(search_paths_regex '/Users/[A-Za-z0-9_-][^[:space:]"]+|/home/[A-Za-z0-9_-][^[:space:]"]+' "${SCAN_PATHS[@]}")
+  else
+    while IFS= read -r path; do
+      [[ -n "$path" ]] || continue
+      paths+=("$path")
+    done < <(scope_paths "$mode")
+
+    if ((${#paths[@]} > 0)); then
+      matches=$(cached_grep_paths '/Users/[A-Za-z0-9_-][^[:space:]"]+|/home/[A-Za-z0-9_-][^[:space:]"]+' "${paths[@]}")
+    fi
+  fi
+
   if [[ -n "$matches" ]]; then
-    fail "absolute home-directory paths were found in tracked content:"
+    fail "absolute home-directory paths were found in the $mode scope:"
     printf '%s\n' "$matches" >&2
   else
-    pass "no absolute home-directory paths were found"
+    pass "no absolute home-directory paths were found in the $mode scope"
   fi
 }
 
 check_secret_like_content() {
+  local mode=$1
   local matches=''
+  local -a paths=()
+  local path=''
 
-  matches=$(search_paths_secret_regex 'sk-[A-Za-z0-9]{20,}|ghp_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,}|xox[baprs]-[A-Za-z0-9-]{10,}|BEGIN [A-Z ]*PRIVATE KEY|OPENAI_API_KEY=' "${SCAN_PATHS[@]}")
+  if [[ "$mode" == 'tracked' ]]; then
+    matches=$(search_paths_secret_regex 'sk-[A-Za-z0-9]{20,}|ghp_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,}|xox[baprs]-[A-Za-z0-9-]{10,}|BEGIN [A-Z ]*PRIVATE KEY|OPENAI_API_KEY=' "${SCAN_PATHS[@]}")
+  else
+    while IFS= read -r path; do
+      [[ -n "$path" ]] || continue
+      paths+=("$path")
+    done < <(scope_paths "$mode")
+
+    if ((${#paths[@]} > 0)); then
+      matches=$(cached_grep_paths_secret 'sk-[A-Za-z0-9]{20,}|ghp_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,}|xox[baprs]-[A-Za-z0-9-]{10,}|BEGIN [A-Z ]*PRIVATE KEY|OPENAI_API_KEY=' "${paths[@]}")
+    fi
+  fi
+
   if [[ -n "$matches" ]]; then
-    fail "secret-like content was found:"
+    fail "secret-like content was found in the $mode scope:"
     printf '%s\n' "$matches" >&2
   else
-    pass "no secret-like content was found"
+    pass "no secret-like content was found in the $mode scope"
   fi
 }
 
-readme_mentions_entry() {
-  local readme=$1
-  local entry_name=$2
+usage() {
+  cat <<'EOF'
+Usage: scripts/check-public-safety.sh [--staged | --tracked]
 
-  if have_rg; then
-    rg -Fq "\`$entry_name\`" "$readme"
-  else
-    grep -Fq "\`$entry_name\`" "$readme"
-  fi
+  --staged   Check only the staged commit content
+  --tracked  Check the full tracked repository content
+
+With no flag, the script checks staged content when staged files are present and
+otherwise falls back to the full tracked repository.
+EOF
 }
 
-check_agents_index() {
-  local readme='agents/README.md'
-  local agent_file=''
-  local entry_name=''
-  local missing=0
-
-  if [[ ! -f "$readme" ]]; then
-    fail "agents index README is missing: $readme"
-    return
-  fi
-
-  while IFS= read -r agent_file; do
-    entry_name=$(basename "$agent_file")
-    if ! readme_mentions_entry "$readme" "$entry_name"; then
-      fail "agents index README is missing \`$entry_name\`: $readme"
-      missing=1
-    fi
-  done < <(find agents -mindepth 1 -maxdepth 1 -type f -name '*.toml' | LC_ALL=C sort)
-
-  if ((missing == 0)); then
-    pass "agents/README.md covers every tracked agent"
-  fi
-}
-
-check_hooks_index() {
-  local readme='hooks/README.md'
-  local hook_entry=''
-  local entry_name=''
-  local missing=0
-
-  if [[ ! -f "$readme" ]]; then
-    fail "hooks index README is missing: $readme"
-    return
-  fi
-
-  while IFS= read -r hook_entry; do
-    entry_name=$(basename "$hook_entry")
-    if ! readme_mentions_entry "$readme" "$entry_name"; then
-      fail "hooks index README is missing \`$entry_name\`: $readme"
-      missing=1
-    fi
-  done < <(find hooks -mindepth 1 -maxdepth 1 ! -name '.DS_Store' ! -name 'README.md' | LC_ALL=C sort)
-
-  if ((missing == 0)); then
-    pass "hooks/README.md covers every tracked hook entry"
-  fi
-}
-
-check_skill_shape() {
-  local skill_dir=''
-
-  while IFS= read -r skill_dir; do
-    [[ -f "$skill_dir/SKILL.md" ]] || fail "skill is missing SKILL.md: $skill_dir"
-    [[ -f "$skill_dir/README.md" ]] || fail "skill is missing README.md: $skill_dir"
-  done < <(find skills -mindepth 1 -maxdepth 1 -type d ! -name '.*' | LC_ALL=C sort)
-
-  pass "every tracked custom skill has SKILL.md and README.md"
-}
-
-check_skills_index() {
-  local readme='skills/README.md'
-  local skill_dir=''
-  local entry_name=''
-  local missing=0
-
-  if [[ ! -f "$readme" ]]; then
-    fail "skills index README is missing: $readme"
-    return
-  fi
-
-  while IFS= read -r skill_dir; do
-    entry_name=$(basename "$skill_dir")
-    if ! readme_mentions_entry "$readme" "$entry_name"; then
-      fail "skills index README is missing \`$entry_name\`: $readme"
-      missing=1
-    fi
-  done < <(find skills -mindepth 1 -maxdepth 1 -type d ! -name '.*' | LC_ALL=C sort)
-
-  if ((missing == 0)); then
-    pass "skills/README.md covers every tracked skill"
-  fi
-}
-
-check_python_hook_compiles() {
-  if [[ -f hooks/session_start_subagents.py ]]; then
-    python3 -m py_compile hooks/session_start_subagents.py
-    pass "hook script compiles with python3"
-  fi
+parse_args() {
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      --staged)
+        MODE=staged
+        shift
+        ;;
+      --tracked)
+        MODE=tracked
+        shift
+        ;;
+      -h|--help)
+        usage
+        exit 0
+        ;;
+      *)
+        printf 'unknown argument: %s\n' "$1" >&2
+        usage >&2
+        exit 1
+        ;;
+    esac
+  done
 }
 
 main() {
+  local mode=''
+
   require_git
-  check_tracked_path_banlist
-  check_absolute_home_paths
-  check_secret_like_content
-  check_agents_index
-  check_hooks_index
-  check_skill_shape
-  check_skills_index
-  check_python_hook_compiles
+  parse_args "$@"
+  mode=$(scope_mode)
+
+  check_path_banlist "$mode"
+  check_absolute_home_paths "$mode"
+  check_secret_like_content "$mode"
 
   if ((failures > 0)); then
     printf '\npublic-safety check failed with %d issue(s)\n' "$failures" >&2
     exit 1
   fi
 
-  printf '\npublic-safety check passed\n' >&2
+  printf '\npublic-safety check passed for %s content\n' "$mode" >&2
 }
 
 main "$@"

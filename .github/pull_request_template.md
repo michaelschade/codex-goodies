@@ -9,7 +9,8 @@
 
 ## Public-Safety Checklist
 
-- [ ] `scripts/check-public-safety.sh` passed
+- [ ] The local pre-commit hook or `scripts/check-public-safety.sh --staged` passed for the staged commit content
+- [ ] `scripts/check-repo-hygiene.sh` passed
 - [ ] No secrets, auth material, or machine-local Codex state were added
 - [ ] No absolute `/Users/...` or `/home/...` paths remain in synced content
 - [ ] No bundled product/system skill content was copied in by accident

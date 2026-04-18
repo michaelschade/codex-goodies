@@ -1,6 +1,6 @@
 # Hooks
 
-Keep this index current whenever a top-level hook runtime entry is added, removed, renamed, or meaningfully repurposed. `scripts/check-public-safety.sh` verifies that every tracked hook entry in this directory is covered here.
+Keep this index current whenever a top-level hook runtime entry is added, removed, renamed, or meaningfully repurposed. `scripts/check-repo-hygiene.sh` verifies that every tracked hook entry in this directory is covered here.
 
 The root `hooks.json` file is the registry that wires these hook scripts into Codex lifecycle events. This directory holds the actual runtime helpers that `hooks.json` invokes.
 

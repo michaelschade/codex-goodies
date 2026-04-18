@@ -46,7 +46,8 @@ When the current repository is `codex-goodies`:
 - Keep `agents/README.md`, `hooks/README.md`, and `skills/README.md` current. Adding, removing, or renaming a top-level runtime entry under `agents/`, `hooks/`, or `skills/` requires updating the matching README and rerunning `bin/install --user` from the dotfiles checkout on each consuming machine so dotfiles can refresh the link map.
 - Keep each skill directory's `README.md` current as well. It should explain the use cases and user-visible value of that skill without duplicating the full `SKILL.md`.
 - Use topic branches for changes. Do not push straight to `main`.
-- Run `scripts/check-public-safety.sh` before opening or updating a pull request.
+- Keep the repo-local pre-commit hook active so `scripts/check-public-safety.sh --staged` catches machine-local or secret content before push.
+- Run `scripts/check-repo-hygiene.sh` before opening or updating a pull request.
 - For this public repo, the commit message should also say which shared surface changed and why that change is safe to publish.
 - Open a pull request for meaningful changes so Codex Security can review them.
 - Prefer same-repo, non-draft pull requests that target `main`; the `Arm Auto-merge` workflow will request squash auto-merge for those PRs when repository settings allow it.

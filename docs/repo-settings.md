@@ -18,7 +18,7 @@ Apply these once in the GitHub UI for `michaelschade/codex-goodies`:
    - Dismiss stale approvals when new commits are pushed: enabled
    - Require conversation resolution before merging: enabled
    - Require status checks to pass before merging: enabled
-   - Required check: `Public Safety / public-safety`
+   - Required check: `Repo Hygiene / repo-hygiene`
    - Do not allow bypasses except for an intentional owner/admin exception if you explicitly want one
 
 ## Intended Flow
@@ -27,9 +27,10 @@ Apply these once in the GitHub UI for `michaelschade/codex-goodies`:
 2. Open a non-draft PR targeting `main`.
 3. Request Codex Security review.
 4. The `Arm Auto-merge` workflow requests squash auto-merge for that PR.
-5. GitHub waits for the required review and `Public Safety` check to succeed, then merges automatically.
+5. GitHub waits for the required review and `Repo Hygiene` check to succeed, then merges automatically.
 
 ## Notes
 
+- Publish-safety checks for secrets, machine-local state, and absolute home-directory paths intentionally run in the local pre-commit hook instead of GitHub Actions. By the time CI runs, the branch contents are already on GitHub, so leak-prevention belongs before push rather than after publication.
 - The auto-merge workflow intentionally ignores PRs from forks. Those can still be merged manually or have auto-merge enabled manually in the UI if you want them to use the same path.
 - If the workflow fails with an auto-merge error, check whether the repository-level auto-merge toggle or the `main` branch rules drifted from the settings above.
