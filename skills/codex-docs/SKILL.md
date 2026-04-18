@@ -21,12 +21,6 @@ Keep this file lean. Load deeper references only when they are actually needed:
 - deciding when a workflow should move into `codex exec`, the SDK, App Server, GitHub Action, or automation
 - privacy-safe introspection of local Codex history and state when the task is about improving Codex using prior sessions, rollout artifacts, logs, memories, or automation state
 
-## Do not use this skill for
-
-- writing or repairing the prompt itself when `$prompt-writing` is the real fit
-- trivial rewrites, polish passes, or generic copyediting
-- ordinary coding or debugging tasks that do not involve Codex workflow design
-
 ## Core rules
 
 ### 1. Inspect live local context when the scope is local
@@ -76,7 +70,7 @@ Prefer official OpenAI sources. If `$openai-docs` is available, prefer it. Use t
 
 ## Workflow
 
-Choose the primary need first. If the request is mixed, solve the docs-and-surface question here and bridge only the part that truly needs a prompt artifact.
+Choose the primary docs-and-surface question first. Keep the work anchored on setup, architecture, local context, and current docs.
 
 ### 1. Clarify the hard part
 
@@ -97,16 +91,8 @@ Choose the primary need first. If the request is mixed, solve the docs-and-surfa
 - Load [references/codex-programmatic.md](references/codex-programmatic.md) when the hard part is CI, structured automation, embedded Codex, custom clients, or Codex as infrastructure.
 - Load [references/codex-local-state.md](references/codex-local-state.md) when the hard part is learning from local rollout artifacts, session files, memories, logs, automations, or SQLite state without leaking sensitive content.
 
-### 4. Bridge only when a second skill is truly needed
+### 4. Keep the recommendation surface-shaped
 
-- If the user also needs a system prompt, developer prompt, or prompt repair artifact, use `$prompt-writing` for that part.
-- Keep the docs and surface recommendation concise enough that it can hand off cleanly to the prompt-writing step.
-
-## Trigger-fit check
-
-Before finishing, sanity-check whether this skill was actually the right one.
-
-- If the request is mainly about writing or repairing a prompt, route to `$prompt-writing`.
-- If the request is really ordinary image prompting, route to `$imagegen`.
-- If the request is really a simple rewrite, do not force this skill's structure.
-- If the request is really implementation work, switch back to the normal coding flow.
+- Recommend the smallest durable surface that solves the problem.
+- Separate architecture guidance from any follow-on artifact writing.
+- Keep the final recommendation concise enough that a later implementation, config edit, or prompt draft can pick it up cleanly.

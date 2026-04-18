@@ -1,6 +1,6 @@
 ---
 name: "prompt-writing"
-description: "Use when the user wants a serious prompt written, repaired, or critiqued: system prompts, developer prompts, reusable task prompts, tool-using prompts, or minimal-edit prompt surgery after a specific failure mode. Fit the prompt to the real runtime and caller contract, and say so when the real fix belongs in a better Codex surface instead."
+description: "Use when the user wants a serious prompt written, repaired, or critiqued: system prompts, developer prompts, reusable task prompts, tool-using prompts, or minimal-edit prompt surgery after a specific failure mode. Fit the prompt to the real runtime and caller contract, and diagnose when wording is not the real issue."
 ---
 
 # Prompt Writing
@@ -19,13 +19,6 @@ Keep this file lean. Load deeper references only when they are actually needed:
 - tool-using prompts
 - prompt critique
 - prompt repair after a specific failure mode
-
-## Do not use this skill for
-
-- trivial rewrites, polish passes, or generic copyediting
-- Codex surface-choice or workflow-design problems that really belong in `$codex-docs`
-- routine image-generation prompting already covered by `$imagegen`
-- ordinary coding or debugging tasks that do not involve prompt authoring
 
 ## Core rules
 
@@ -66,7 +59,7 @@ Then:
 
 ## Workflow
 
-Choose one primary mode first. If the request is mixed, solve the prompt-authoring part here and bridge only the part that truly needs a second skill.
+Choose one primary prompt task first. Keep the work anchored on the prompt artifact and the behavior it needs to produce.
 
 ### 1. Classify the task
 
@@ -85,24 +78,16 @@ Choose one primary mode first. If the request is mixed, solve the prompt-authori
 
 - Load [references/prompt-patterns.md](references/prompt-patterns.md) when you need concrete scaffolds, structure choices, repair recipes, or the step-back meta prompt.
 
-### 4. Bridge when the issue is not really prompt wording
+### 4. Step back when wording is not the real problem
 
-- If the hard part is deciding what belongs in prompts versus hooks, skills, subagents, config, or automation, use `$codex-docs`.
-- If the failure is not primarily a prompt problem, say so and recommend the better fix instead of overfitting the prompt.
+- If the draft keeps growing without improving the outcome, diagnose whether the issue is missing context, caller contract, tool design, or evaluation.
+- Say plainly when another prompt rewrite will not solve the failure mode.
+- Keep the prompt deliverable clean even when the surrounding diagnosis reaches beyond wording.
 
-## Image prompt bridge
+## Specialized modalities
 
-Use this only when the request mixes prompt engineering with image work.
+Use this only when the request genuinely needs prompt work for a specialized modality.
 
-- Reuse `$imagegen` for raster-specific prompt schemas and execution paths.
-- Keep only the cross-cutting prompt critique, framing, or structure work here.
-- Do not duplicate the full image prompting guide in this skill.
-
-## Trigger-fit check
-
-Before finishing, sanity-check whether this skill was actually the right one.
-
-- If the request is really about Codex surfaces, docs, hooks, skills, or automations, route to `$codex-docs`.
-- If the request is really ordinary image prompting, route to `$imagegen`.
-- If the request is really a simple rewrite, do not force this skill's structure.
-- If the request is really implementation work, switch back to the normal coding flow.
+- Keep the focus on cross-cutting framing, structure, and repair.
+- Do not turn this skill into a domain-specific execution guide.
+- Do not assume text-agent prompting transfers cleanly to every modality.

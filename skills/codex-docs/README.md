@@ -1,6 +1,6 @@
 # Codex Docs
 
-This skill matters when the problem is not just "what should the prompt say?" but "how should Codex itself be set up or used?" It helps with Codex surfaces, docs-guided workflow choices, and the boundary between prompt fixes and structural fixes.
+This skill matters when the real question is how Codex itself should be set up, structured, or used. It helps with Codex surfaces, docs-guided workflow choices, and the durable decisions behind a clean workflow.
 
 ## Why You Might Care
 
