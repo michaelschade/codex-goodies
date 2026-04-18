@@ -14,20 +14,20 @@ Apply these once in the GitHub UI for `michaelschade/codex-goodies`:
    - Allow rebase merging: disabled
 2. Branch protection or ruleset for `main`
    - Require a pull request before merging
-   - Require at least 1 approval
-   - Dismiss stale approvals when new commits are pushed: enabled
-   - Require conversation resolution before merging: enabled
    - Require status checks to pass before merging: enabled
-   - Required check: `Repo Hygiene / repo-hygiene`
+   - Required checks:
+     - `Repo Hygiene / repo-hygiene`
+     - `Socket Security: Project Report`
+   - Allow force pushes: disabled
    - Do not allow bypasses except for an intentional owner/admin exception if you explicitly want one
 
 ## Intended Flow
 
 1. Push a topic branch in this repository.
 2. Open a non-draft PR targeting `main`.
-3. Request Codex Security review.
+3. Optionally request Codex Security review when you want human review before merge.
 4. The `Arm Auto-merge` workflow requests squash auto-merge for that PR.
-5. GitHub waits for the required review and `Repo Hygiene` check to succeed, then merges automatically.
+5. GitHub waits for `Repo Hygiene`, `Socket Security: Project Report`, and any other required checks to succeed, then merges automatically.
 
 ## Notes
 
