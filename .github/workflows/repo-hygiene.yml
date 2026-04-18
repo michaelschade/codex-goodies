@@ -1,4 +1,4 @@
-name: Public Safety
+name: Repo Hygiene
 
 on:
   pull_request:
@@ -10,9 +10,9 @@ permissions:
   contents: read
 
 jobs:
-  public-safety:
+  repo-hygiene:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
-      - name: Run public-safety checks
-        run: scripts/check-public-safety.sh
+      - name: Run repo-hygiene checks
+        run: scripts/check-repo-hygiene.sh

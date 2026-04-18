@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+REPO_ROOT=$(git rev-parse --show-toplevel 2>/dev/null)
+
+[[ -n "$REPO_ROOT" ]] || {
+  printf 'could not determine the repository root for the pre-commit hook\n' >&2
+  exit 1
+}
+
+PUBLISH_SAFETY_SCRIPT="$REPO_ROOT/scripts/check-public-safety.sh"
+REPO_HYGIENE_SCRIPT="$REPO_ROOT/scripts/check-repo-hygiene.sh"
+
+[[ -x "$PUBLISH_SAFETY_SCRIPT" ]] || {
+  printf 'missing or non-executable publish-safety script: %s\n' "$PUBLISH_SAFETY_SCRIPT" >&2
+  exit 1
+}
+
+[[ -x "$REPO_HYGIENE_SCRIPT" ]] || {
+  printf 'missing or non-executable repo-hygiene script: %s\n' "$REPO_HYGIENE_SCRIPT" >&2
+  exit 1
+}
+
+"$PUBLISH_SAFETY_SCRIPT" --staged
+"$REPO_HYGIENE_SCRIPT"

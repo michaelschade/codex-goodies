@@ -18,6 +18,8 @@
 - Open the PR from a branch in this repository when you want the `Arm Auto-merge` workflow to request squash auto-merge automatically.
 - Keep [`docs/repo-settings.md`](docs/repo-settings.md) in sync with the actual GitHub branch-protection and auto-merge configuration.
 
-## Required Check
+## Local Checks
 
-- Run `scripts/check-public-safety.sh` before pushing.
+- Keep the repo-local `.githooks/pre-commit` hook active so sensitive or machine-local publish-safety issues are caught before push. If dotfiles is managing your checkout it should keep `core.hooksPath=.githooks` in place automatically; otherwise run `git config core.hooksPath .githooks` once in this repo.
+- Run `scripts/check-public-safety.sh --staged` manually if you want to audit the exact staged commit content.
+- Run `scripts/check-repo-hygiene.sh` before pushing when you changed shared surface shape, README indexes, or hook code.
