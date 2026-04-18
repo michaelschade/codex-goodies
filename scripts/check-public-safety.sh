@@ -23,6 +23,44 @@ require_git() {
   }
 }
 
+have_rg() {
+  command -v rg >/dev/null 2>&1
+}
+
+search_stream_regex() {
+  local pattern=$1
+
+  if have_rg; then
+    rg "$pattern" || true
+  else
+    grep -E -- "$pattern" || true
+  fi
+}
+
+search_paths_regex() {
+  local pattern=$1
+
+  shift
+
+  if have_rg; then
+    rg -n "$pattern" "$@" || true
+  else
+    grep -R -n -E -- "$pattern" "$@" || true
+  fi
+}
+
+search_paths_secret_regex() {
+  local pattern=$1
+
+  shift
+
+  if have_rg; then
+    rg -n --glob '!scripts/check-public-safety.sh' "$pattern" "$@" || true
+  else
+    grep -R -n -E -- "$pattern" "$@" | grep -v '^scripts/check-public-safety.sh:' || true
+  fi
+}
+
 current_tracked_paths() {
   local path=''
 
@@ -36,7 +74,7 @@ current_tracked_paths() {
 check_tracked_path_banlist() {
   local banned=''
 
-  banned=$(current_tracked_paths | rg '(^|/)(auth\.json|session_index\.jsonl|models_cache\.json|installation_id|version\.json|\.codex-global-state\.json|.*\.sqlite(|-shm|-wal)|.*\.db|.*\.db-shm|.*\.db-wal|.*\.bak|.*\.orig|.*~|bak-skill\.md)$|(^|/)(archived_sessions|automations|cache|generated_images|log|memories|sessions|shell_snapshots|sqlite)/|^codex-home(/|$)|^skills/(\.system|codex-primary-runtime)(/|$)' || true)
+  banned=$(current_tracked_paths | search_stream_regex '(^|/)(auth\.json|session_index\.jsonl|models_cache\.json|installation_id|version\.json|\.codex-global-state\.json|.*\.sqlite(-shm|-wal)?|.*\.db|.*\.db-shm|.*\.db-wal|.*\.bak|.*\.orig|.*~|bak-skill\.md)$|(^|/)(archived_sessions|automations|cache|generated_images|log|memories|sessions|shell_snapshots|sqlite)/|^codex-home(/|$)|^skills/(\.system|codex-primary-runtime)(/|$)')
   if [[ -n "$banned" ]]; then
     fail "tracked files or directories from local Codex state are present:"
     printf '%s\n' "$banned" >&2
@@ -48,7 +86,7 @@ check_tracked_path_banlist() {
 check_absolute_home_paths() {
   local matches=''
 
-  matches=$(rg -n '/Users/[A-Za-z0-9_-][^[:space:]"]+|/home/[A-Za-z0-9_-][^[:space:]"]+' "${SCAN_PATHS[@]}" || true)
+  matches=$(search_paths_regex '/Users/[A-Za-z0-9_-][^[:space:]"]+|/home/[A-Za-z0-9_-][^[:space:]"]+' "${SCAN_PATHS[@]}")
   if [[ -n "$matches" ]]; then
     fail "absolute home-directory paths were found in tracked content:"
     printf '%s\n' "$matches" >&2
@@ -60,7 +98,7 @@ check_absolute_home_paths() {
 check_secret_like_content() {
   local matches=''
 
-  matches=$(rg -n --glob '!scripts/check-public-safety.sh' 'sk-[A-Za-z0-9]{20,}|ghp_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,}|xox[baprs]-[A-Za-z0-9-]{10,}|BEGIN [A-Z ]*PRIVATE KEY|OPENAI_API_KEY=' "${SCAN_PATHS[@]}" || true)
+  matches=$(search_paths_secret_regex 'sk-[A-Za-z0-9]{20,}|ghp_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,}|xox[baprs]-[A-Za-z0-9-]{10,}|BEGIN [A-Z ]*PRIVATE KEY|OPENAI_API_KEY=' "${SCAN_PATHS[@]}")
   if [[ -n "$matches" ]]; then
     fail "secret-like content was found:"
     printf '%s\n' "$matches" >&2
@@ -73,7 +111,11 @@ readme_mentions_entry() {
   local readme=$1
   local entry_name=$2
 
-  rg -Fq "\`$entry_name\`" "$readme"
+  if have_rg; then
+    rg -Fq "\`$entry_name\`" "$readme"
+  else
+    grep -Fq "\`$entry_name\`" "$readme"
+  fi
 }
 
 check_agents_index() {
