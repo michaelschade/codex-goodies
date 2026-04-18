@@ -1,0 +1,4 @@
+interface:
+  display_name: "xTool Studio"
+  short_description: "Measure and place art in xTool Studio"
+  default_prompt: "Use $xtool-studio to import artwork into xTool Studio, size it from measured material bounds, and verify final placement."

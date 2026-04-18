@@ -1,0 +1,16 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup|resume",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"${CODEX_HOME:-$HOME/.codex}/hooks/session_start_subagents.py\"",
+            "statusMessage": "Loading session subagent context"
+          }
+        ]
+      }
+    ]
+  }
+}

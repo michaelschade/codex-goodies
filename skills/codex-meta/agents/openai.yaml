@@ -1,0 +1,7 @@
+interface:
+  display_name: "Codex Meta"
+  short_description: "Design Codex workflows and stronger prompts"
+  default_prompt: "Use $codex-meta to design or improve a non-trivial prompt, hook, subagent, skill, AGENTS.md or PLANS.md guidance, or Codex workflow. Start with the lean core guidance in this skill, then load `references/prompt-patterns.md` for deeper prompt structure or repair patterns, `references/codex-system.md` for deeper Codex surface, config, memory, or doc-map guidance, and `references/codex-programmatic.md` when the hard part is `codex exec`, the SDK, App Server, GitHub Action, or embedding Codex into a larger system. Inspect the current local Codex setup before recommending Codex-meta changes, fit prompts to their actual execution context and caller contract, keep hooks thin, prefer minimal surgical edits when improving an existing prompt, and step back to rethink the broader approach when repeated prompt tweaks are not fixing the real issue."
+
+policy:
+  allow_implicit_invocation: true
