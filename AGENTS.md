@@ -16,7 +16,8 @@ This repository is public and is meant to feed selected files into `~/.codex` on
 - Run `scripts/check-public-safety.sh` before opening or updating a pull request.
 - Keep commits focused and informative. The commit message should say which synced surface changed and why that change is safe to publish.
 - Open a pull request for meaningful changes so Codex Security can review them.
-- After the required checks and review are green, enable auto-merge when repository settings allow it.
+- Prefer same-repo, non-draft pull requests that target `main`; the `Arm Auto-merge` workflow will request squash auto-merge for those PRs when repository settings allow it.
+- Keep [`docs/repo-settings.md`](docs/repo-settings.md) aligned with the actual GitHub rules and required checks.
 
 ## Codex-Home Edits
 

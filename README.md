@@ -28,15 +28,19 @@ The synced surface lives under [`codex-home/`](codex-home/). Dotfiles links that
 2. If you changed files inside an existing linked skill, hook, or agent, the live `~/.codex` surface updates immediately through the symlink.
 3. If you add, remove, or rename a top-level entry under `codex-home/skills`, `codex-home/agents`, or `codex-home/hooks`, rerun `bin/install --user` from the dotfiles checkout on each machine so dotfiles can refresh the link map.
 4. Run `scripts/check-public-safety.sh`.
-5. Commit on a topic branch, open a pull request, request Codex Security review, and enable auto-merge after the required checks and review are green when repository settings allow it.
+5. Commit on a topic branch and open a pull request from this repository.
+6. Request Codex Security review.
+7. For non-draft PRs that target `main` from this repository, the `Arm Auto-merge` workflow automatically requests squash auto-merge when repository settings allow it. GitHub then waits for the required checks and review to turn green before merging.
 
 ## Layout
 
 - [`AGENTS.md`](AGENTS.md): repo-specific instructions for agents working in this public repo
 - [`CONTRIBUTING.md`](CONTRIBUTING.md): commit and PR hygiene
 - [`codex-home/`](codex-home/): the only subtree dotfiles links into `~/.codex`
+- [`docs/repo-settings.md`](docs/repo-settings.md): one-time GitHub settings needed for review-gated auto-merge
 - [`scripts/check-public-safety.sh`](scripts/check-public-safety.sh): deterministic public-safety and shape checks
 - [`.github/workflows/public-safety.yml`](.github/workflows/public-safety.yml): CI for PRs and pushes
+- [`.github/workflows/arm-auto-merge.yml`](.github/workflows/arm-auto-merge.yml): auto-arms squash auto-merge for same-repo PRs
 
 ## License
 

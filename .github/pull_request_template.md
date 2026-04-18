@@ -17,4 +17,5 @@
 ## Review
 
 - [ ] Codex Security review requested
-- [ ] Auto-merge enabled after required checks and review were green, if repository settings allowed it
+- [ ] This PR comes from a same-repo branch if it should auto-arm auto-merge
+- [ ] Repo settings still match `docs/repo-settings.md`

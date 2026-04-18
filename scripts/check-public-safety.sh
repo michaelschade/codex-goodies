@@ -5,6 +5,7 @@ ROOT_DIR="$(CDPATH= cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT_DIR"
 
 failures=0
+SCAN_PATHS=(AGENTS.md CONTRIBUTING.md README.md codex-home .github docs scripts)
 
 fail() {
   printf '[FAIL] %s\n' "$1" >&2
@@ -37,7 +38,7 @@ check_tracked_path_banlist() {
 check_absolute_home_paths() {
   local matches=''
 
-  matches=$(rg -n '/Users/[A-Za-z0-9_-][^[:space:]"]+|/home/[A-Za-z0-9_-][^[:space:]"]+' AGENTS.md CONTRIBUTING.md README.md codex-home .github scripts || true)
+  matches=$(rg -n '/Users/[A-Za-z0-9_-][^[:space:]"]+|/home/[A-Za-z0-9_-][^[:space:]"]+' "${SCAN_PATHS[@]}" || true)
   if [[ -n "$matches" ]]; then
     fail "absolute home-directory paths were found in tracked content:"
     printf '%s\n' "$matches" >&2
@@ -49,7 +50,7 @@ check_absolute_home_paths() {
 check_secret_like_content() {
   local matches=''
 
-  matches=$(rg -n --glob '!scripts/check-public-safety.sh' 'sk-[A-Za-z0-9]{20,}|ghp_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,}|xox[baprs]-[A-Za-z0-9-]{10,}|BEGIN [A-Z ]*PRIVATE KEY|OPENAI_API_KEY=' AGENTS.md CONTRIBUTING.md README.md codex-home .github scripts || true)
+  matches=$(rg -n --glob '!scripts/check-public-safety.sh' 'sk-[A-Za-z0-9]{20,}|ghp_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,}|xox[baprs]-[A-Za-z0-9-]{10,}|BEGIN [A-Z ]*PRIVATE KEY|OPENAI_API_KEY=' "${SCAN_PATHS[@]}" || true)
   if [[ -n "$matches" ]]; then
     fail "secret-like content was found:"
     printf '%s\n' "$matches" >&2

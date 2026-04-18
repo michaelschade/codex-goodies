@@ -14,7 +14,8 @@
 - Keep the PR description explicit about what changed in `codex-home/` and why it belongs in a public repo.
 - Mention whether consuming machines need to rerun `bin/install --user` because a top-level linked entry was added, removed, or renamed.
 - Request Codex Security review before merge.
-- Enable auto-merge after the required checks and review are green when the repository settings allow it.
+- Open the PR from a branch in this repository when you want the `Arm Auto-merge` workflow to request squash auto-merge automatically.
+- Keep [`docs/repo-settings.md`](docs/repo-settings.md) in sync with the actual GitHub branch-protection and auto-merge configuration.
 
 ## Required Check
 
