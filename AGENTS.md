@@ -25,6 +25,14 @@
 - If one component is noisy exploration and another is downstream creation, implementation, or stateful execution, consider whether the exploratory component should be delegated before starting it.
 - If one component needs stronger proof requirements or a different modality than the rest of the task, consider giving that component its own owner rather than keeping the whole task in the parent by default.
 
+## Commit Hygiene
+
+- Write thorough commit messages by default, not just a terse one-line subject.
+- Start with a concise subject that names the main outcome, then add a body for non-trivial changes.
+- The body should explain what changed, why it changed, and any important behavior, risk, migration, or reviewer context that is not obvious from the diff alone.
+- When validation or verification was run, note it in the commit message body. If a relevant check could not run, say that explicitly instead of implying it passed.
+- Keep one idea per commit when practical so the message and the diff stay aligned.
+
 ## codex-goodies Repository
 
 When the current repository is `codex-goodies`:
@@ -39,7 +47,7 @@ When the current repository is `codex-goodies`:
 - Keep each skill directory's `README.md` current as well. It should explain the use cases and user-visible value of that skill without duplicating the full `SKILL.md`.
 - Use topic branches for changes. Do not push straight to `main`.
 - Run `scripts/check-public-safety.sh` before opening or updating a pull request.
-- Keep commits focused and informative. The commit message should say which shared surface changed and why that change is safe to publish.
+- For this public repo, the commit message should also say which shared surface changed and why that change is safe to publish.
 - Open a pull request for meaningful changes so Codex Security can review them.
 - Prefer same-repo, non-draft pull requests that target `main`; the `Arm Auto-merge` workflow will request squash auto-merge for those PRs when repository settings allow it.
 - Keep [`docs/repo-settings.md`](docs/repo-settings.md) aligned with the actual GitHub rules and required checks.
