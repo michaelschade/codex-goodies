@@ -5,7 +5,7 @@
 ## Consuming-Machine Impact
 
 - [ ] No machine rerun needed beyond the live symlinked file edits
-- [ ] Rerun `bin/install --user` on consuming machines because a top-level entry under `codex-home/skills`, `codex-home/agents`, or `codex-home/hooks` was added, removed, or renamed
+- [ ] Rerun `bin/install --user` on consuming machines because a top-level entry under `skills/`, `agents/`, or `hooks/` was added, removed, or renamed
 
 ## Public-Safety Checklist
 
@@ -13,6 +13,7 @@
 - [ ] No secrets, auth material, or machine-local Codex state were added
 - [ ] No absolute `/Users/...` or `/home/...` paths remain in synced content
 - [ ] No bundled product/system skill content was copied in by accident
+- [ ] Directory README indexes were updated for any changed top-level entries
 
 ## Review
 

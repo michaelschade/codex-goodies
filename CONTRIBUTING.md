@@ -11,8 +11,9 @@
 ## PR Hygiene
 
 - Open a pull request instead of merging straight to `main`.
-- Keep the PR description explicit about what changed in `codex-home/` and why it belongs in a public repo.
+- Keep the PR description explicit about which shared root surfaces changed and why they belong in a public repo.
 - Mention whether consuming machines need to rerun `bin/install --user` because a top-level linked entry was added, removed, or renamed.
+- Update `agents/README.md`, `hooks/README.md`, or `skills/README.md` in the same change whenever the corresponding top-level runtime entries change.
 - Request Codex Security review before merge.
 - Open the PR from a branch in this repository when you want the `Arm Auto-merge` workflow to request squash auto-merge automatically.
 - Keep [`docs/repo-settings.md`](docs/repo-settings.md) in sync with the actual GitHub branch-protection and auto-merge configuration.
