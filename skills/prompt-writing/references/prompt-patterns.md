@@ -226,7 +226,7 @@ Avoid:
 
 Use when the user is really designing Codex itself rather than just asking for a prompt.
 
-If the hard part is deciding what should live in prompts versus skills, hooks, config, subagents, or automation, also use `$codex-docs`.
+If the hard part is deciding what should live in prompts versus skills, hooks, config, subagents, or automation, also use `$codex-meta`.
 
 ```text
 Recommended shape:

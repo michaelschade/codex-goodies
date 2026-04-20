@@ -1,0 +1,11 @@
+# Codex Meta
+
+Use this when you are using Codex to configure Codex itself. It gives Codex a system-level map of its own surfaces, from hooks, `AGENTS.md`, skills, subagents, memories, and automations to `codex exec`, the SDK, App Server, GitHub Actions, and local-state inspection.
+
+- **Codex: automate Codex.** When Codex understands how hooks, skills, subagents, automations, and programmatic surfaces fit together, it can build new extensions with much better awareness of the rest of the system and avoid creating overlapping instructions that fight each other. Paired with introspection over logs, session history, and rollouts plus skills like [`$prompt-writing`](../prompt-writing/README.md), that makes it much easier to turn a few good runs into deeper, more foundational automations that accelerate your style of work everywhere.
+- **Get the whole platform into one mental model.** This skill pulls prompts, hooks, `AGENTS.md`, skills, subagents, automations, `codex exec`, the SDK, App Server, and GitHub Actions into one coherent map, so Codex can reason across the full system instead of rediscovering the docs topology each time.
+- **Call into Codex elsewhere to build better tools and products.** It highlights the surfaces that matter when you want Codex embedded beyond a chat: the SDK when you want Codex inside an internal tool, service, or app, and App Server when you want a richer client with conversation history, streamed events, and approval-aware workflows.
+
+Many of these pair naturally with [`$prompt-writing`](../prompt-writing/README.md), which draws on the [GPT-5 prompting guide](https://developers.openai.com/cookbook/examples/gpt-5/gpt-5_prompting_guide.md), [Prompt guidance for GPT-5.4](https://developers.openai.com/api/docs/guides/prompt-guidance), and [Codex Prompting Guide](https://developers.openai.com/cookbook/examples/gpt-5/codex_prompting_guide.md) to help Codex write prompts that match where they will be invoked and what the broader project is trying to achieve. Altogether, that means a rollout review that took a few revs can turn into a sharper subagent, hook, or automation prompt for the next class of similar problems.
+
+If you already know you need the full operating rules, examples, and references, jump to [`SKILL.md`](SKILL.md).

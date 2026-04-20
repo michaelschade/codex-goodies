@@ -1,9 +1,9 @@
 ---
-name: "codex-docs"
+name: "codex-meta"
 description: "Use when the user wants to understand, design, or improve Codex itself: hooks, subagents, skills, AGENTS.md or PLANS.md guidance, config-aware workflow design, Codex docs navigation, or deciding when to use codex exec, the SDK, App Server, GitHub Action, or automation. Inspect the current local Codex setup before recommending repo- or machine-scoped changes."
 ---
 
-# Codex Docs
+# Codex Meta
 
 Use this skill for Codex-system questions and docs-grounded workflow design.
 
