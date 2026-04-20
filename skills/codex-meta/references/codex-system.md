@@ -392,6 +392,22 @@ Strong rule from the best-practices guide:
 
 - automate only after the workflow is manually reliable
 
+Treat automation prompt, execution surface, and sandbox posture as one design decision.
+
+Two automation shapes matter:
+
+- thread automations stay attached to the same conversation; in current Codex app behavior, they preserve the thread's context and inherited approval or sandbox posture instead of starting a brand-new project run
+- standalone or project automations start fresh in the selected project or worktree; they inherit the posture of that run context, which means global defaults still apply and trusted project config can further shape the boundary
+
+Important clarifications:
+
+- you do not need a project `.codex/config.toml` for automation inheritance to work; Codex handles the normal config layering automatically
+- the interesting edge case here is projectless thread-attached automation: if a workflow began in a broad-permission thread and later deserves a narrower durable boundary, creating a project `.codex/config.toml` can be an optional way to scope future runs more tightly
+- do not treat that as a default recommendation for existing projects; changing a project's Codex config is a separate explicit decision
+- if you do narrow a formerly broad-permission automation, keep the boundary wide enough for the job to retain the file, network, and tool reach it actually depends on
+- in that narrow-down case, if the job mostly needs the workspace plus a well-defined set of additional directories, prefer `sandbox_mode = "workspace-write"` with targeted `sandbox_workspace_write.writable_roots` over widening machine-wide defaults
+- prefer `workspace-write` when it is enough; full-access background automations are a much stronger trust decision
+
 Skills define the method. Automations define the schedule.
 
 Prompting nuance:
