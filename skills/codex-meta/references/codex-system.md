@@ -205,6 +205,12 @@ Strong rule:
 
 - if the logic depends on prompt wording, regex buckets, scoring rules, or inferred task semantics, the hook is probably the wrong surface
 
+Prompting nuance:
+
+- hook-injected text should carry only the behavior-changing context
+- strip scene-setting, repo trivia, and architectural debates out of hook text
+- if the hard part is drafting the injected model-facing instructions so they fit the goal, runtime, and terminology rather than choosing the surface, pair the fix with `$prompt-writing`
+
 ### Skills and plugins
 
 The docs frame skills as reusable capabilities and expertise for Codex. A plugin is the packaging and distribution surface for sharing those capabilities more broadly.
@@ -240,6 +246,12 @@ Plugin nuance that matters:
 - build or install a plugin when you want to package skills, apps, or dependencies for reuse or sharing
 - keep the first version local unless broader sharing is actually the goal
 
+Prompting nuance:
+
+- the description should say what the skill does and when to use it
+- one skill should own one reusable job with a small number of concrete use cases
+- keep `SKILL.md` lean and move depth into references or scripts when needed
+
 ### Subagents and custom agents
 
 The docs frame subagents as specialized agents spawned in parallel. The concepts docs emphasize their value for managing context pollution and keeping noisy work off the main thread.
@@ -266,6 +278,13 @@ Do not use them when:
 Important reminder:
 
 - subagents are explicit delegation tools, not automatic decomposition magic
+
+Prompting nuance:
+
+- give each subagent one clear job
+- state the ownership boundary or write scope explicitly
+- match the tool and model surface to the kind of proof the task needs
+- include anti-drift or evidence expectations when correctness matters
 
 ### MCP and connectors
 
@@ -374,6 +393,12 @@ Strong rule from the best-practices guide:
 - automate only after the workflow is manually reliable
 
 Skills define the method. Automations define the schedule.
+
+Prompting nuance:
+
+- the automation prompt should describe the durable task, not the cadence or workspace
+- include change detection, source priority, delegation limits, and done-when when the run is non-trivial
+- if the hard part is drafting that model-facing task prompt so it fits the intended goal, runtime, and terminology, pair the draft with `$prompt-writing`
 
 ## 5. Administration and trust surfaces
 

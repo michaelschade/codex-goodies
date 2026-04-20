@@ -7,6 +7,8 @@ description: "Use when the user wants to understand, design, or improve Codex it
 
 Use this skill for Codex-system questions and docs-grounded workflow design.
 
+Use it when the hard part is not just wording, but how Codex surfaces such as hooks, skills, subagents, or automations should be shaped and related.
+
 Keep this file lean. Load deeper references only when they are actually needed:
 
 - [references/codex-system.md](references/codex-system.md) for surface choice, hooks, subagents, memories, config, and grouped doc scaffolding
@@ -16,6 +18,7 @@ Keep this file lean. Load deeper references only when they are actually needed:
 ## Use this skill for
 
 - hooks, subagents, skills, `AGENTS.md`, `PLANS.md`, and Codex workflow design
+- prompting or documenting Codex-specific surfaces such as hooks, skills, subagents, or automations when the surface itself is the design question
 - deciding what belongs in prompts versus Codex surfaces
 - docs-guided recommendations about current Codex capabilities, surfaces, and setup
 - deciding when a workflow should move into `codex exec`, the SDK, App Server, GitHub Action, or automation
@@ -55,6 +58,8 @@ Start with:
 - Hooks are for concise lifecycle context injection, light plumbing, or crisp objective guardrails.
 - Do not use hooks as semantic planners, prompt classifiers, or hidden workflow engines.
 - If nuanced judgment is required, prefer better model-facing instructions, better surface choice, better agent design, or a better evaluation loop.
+- Once a surface is chosen, keep its prompt or instructions specific to that surface: hook text should be terse and objective, skill guidance should define one reusable job, subagent briefs should set ownership and proof expectations, and automation prompts should describe the durable task rather than the schedule.
+- Use `$prompt-writing` when the surface is already chosen and you need to write or refine the model-facing prompt or instructions so they fit the intended goal, runtime, and terminology.
 - Load [references/codex-system.md](references/codex-system.md) when the hard part is surface choice across hooks, `AGENTS.md`, skills, subagents, config, MCP, worktrees, memories, or automations.
 - Load [references/codex-programmatic.md](references/codex-programmatic.md) when the hard part is `codex exec`, the SDK, App Server, GitHub Action, or Codex as infrastructure inside a larger system.
 
@@ -75,6 +80,7 @@ Choose the primary docs-and-surface question first. Keep the work anchored on se
 ### 1. Clarify the hard part
 
 - surface choice across prompts, skills, hooks, subagents, config, memories, or automation
+- surface-specific prompt shaping for hooks, skills, subagents, or automations
 - programmatic Codex usage such as `codex exec`, the SDK, App Server, or GitHub Action
 - privacy-safe learning from local rollouts, memories, logs, or automation state
 - docs navigation or drift-sensitive Codex recommendations
@@ -95,4 +101,5 @@ Choose the primary docs-and-surface question first. Keep the work anchored on se
 
 - Recommend the smallest durable surface that solves the problem.
 - Separate architecture guidance from any follow-on artifact writing.
+- If the surface is already chosen and you need to refine the model-facing prompt or instructions for that surface, hand that work to `$prompt-writing`.
 - Keep the final recommendation concise enough that a later implementation, config edit, or prompt draft can pick it up cleanly.
