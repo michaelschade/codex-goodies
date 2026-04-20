@@ -19,5 +19,5 @@
 ## Review
 
 - [ ] Codex Security review requested
-- [ ] This PR comes from a same-repo branch if it should auto-arm auto-merge
+- [ ] This PR is open, not draft, and comes from a same-repo branch if it should auto-arm auto-merge
 - [ ] Repo settings still match `docs/repo-settings.md`

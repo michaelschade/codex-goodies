@@ -33,4 +33,5 @@ Apply these once in the GitHub UI for `michaelschade/codex-goodies`:
 
 - Publish-safety checks for secrets, machine-local state, and absolute home-directory paths intentionally run in the local pre-commit hook instead of GitHub Actions. By the time CI runs, the branch contents are already on GitHub, so leak-prevention belongs before push rather than after publication.
 - The auto-merge workflow intentionally ignores PRs from forks. Those can still be merged manually or have auto-merge enabled manually in the UI if you want them to use the same path.
-- If the workflow fails with an auto-merge error, check whether the repository-level auto-merge toggle or the `main` branch rules drifted from the settings above.
+- If the workflow reports that the PR is in an unstable status, that usually means GitHub had not finished settling mergeability yet. Re-run the workflow or push a new commit after the PR stabilizes before assuming the repository settings drifted.
+- If the workflow fails with an auto-merge or merge-method settings error, check whether the repository-level auto-merge toggle, squash-merge setting, or the `main` branch rules drifted from the settings above.

@@ -26,52 +26,129 @@ jobs:
           script: |
             const { owner, repo } = context.repo;
             const number = context.payload.pull_request.number;
+            const maxAttempts = 12;
+            const delayMs = 10000;
 
-            const result = await github.graphql(
-              `
-                query($owner: String!, $repo: String!, $number: Int!) {
-                  repository(owner: $owner, name: $repo) {
-                    pullRequest(number: $number) {
-                      id
-                      autoMergeRequest {
-                        enabledAt
-                      }
-                    }
-                  }
-                }
-              `,
-              { owner, repo, number }
-            );
+            const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-            const pullRequest = result.repository.pullRequest;
-            if (pullRequest.autoMergeRequest) {
-              core.info(`Auto-merge already enabled for PR #${number}.`);
-              return;
-            }
-
-            try {
-              await github.graphql(
+            async function loadPullRequest() {
+              const result = await github.graphql(
                 `
-                  mutation($pullRequestId: ID!) {
-                    enablePullRequestAutoMerge(
-                      input: {
-                        pullRequestId: $pullRequestId
-                        mergeMethod: SQUASH
-                      }
-                    ) {
-                      pullRequest {
-                        number
+                  query($owner: String!, $repo: String!, $number: Int!) {
+                    repository(owner: $owner, name: $repo) {
+                      pullRequest(number: $number) {
+                        id
+                        mergeable
+                        mergeStateStatus
+                        autoMergeRequest {
+                          enabledAt
+                        }
                       }
                     }
                   }
                 `,
-                { pullRequestId: pullRequest.id }
+                { owner, repo, number }
               );
-              core.info(`Enabled squash auto-merge for PR #${number}.`);
-            } catch (error) {
-              const message = String(error.message || error);
+
+              return result.repository.pullRequest;
+            }
+
+            function formatState(pullRequest) {
+              if (!pullRequest) {
+                return 'mergeable=unknown, mergeStateStatus=unknown';
+              }
+
+              return `mergeable=${pullRequest.mergeable}, mergeStateStatus=${pullRequest.mergeStateStatus}`;
+            }
+
+            function failForTransientState(pullRequest) {
               core.setFailed(
-                `Could not enable auto-merge for PR #${number}: ${message}. ` +
+                `Could not enable auto-merge for PR #${number} because GitHub kept reporting a transient merge state after ${maxAttempts} attempts over ${Math.round((maxAttempts - 1) * delayMs / 1000)}s (${formatState(pullRequest)}). ` +
+                  `This usually means GitHub had not settled the PR yet, not that the repository settings are wrong. Re-run the workflow once the PR is stable; if the retry still fails, then verify the repository settings in docs/repo-settings.md.`
+              );
+            }
+
+            function failForSettings(message, pullRequest) {
+              core.setFailed(
+                `Could not enable auto-merge for PR #${number}: ${message} (${formatState(pullRequest)}). ` +
                   `Verify the repository settings in docs/repo-settings.md.`
               );
+            }
+
+            function failForOther(message, pullRequest) {
+              core.setFailed(
+                `Could not enable auto-merge for PR #${number}: ${message} (${formatState(pullRequest)}). ` +
+                  `If this is not a transient PR-state issue, verify the repository settings in docs/repo-settings.md.`
+              );
+            }
+
+            let pullRequest = null;
+
+            for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
+              pullRequest = await loadPullRequest();
+
+              if (pullRequest.autoMergeRequest) {
+                core.info(`Auto-merge already enabled for PR #${number}.`);
+                return;
+              }
+
+              if (['UNKNOWN', 'UNSTABLE'].includes(pullRequest.mergeStateStatus)) {
+                if (attempt === maxAttempts) {
+                  failForTransientState(pullRequest);
+                  return;
+                }
+
+                core.info(
+                  `PR #${number} is not stable enough to arm auto-merge yet (${formatState(pullRequest)}). ` +
+                    `Retrying in ${Math.round(delayMs / 1000)}s (${attempt}/${maxAttempts}).`
+                );
+                await sleep(delayMs);
+                continue;
+              }
+
+              try {
+                await github.graphql(
+                  `
+                    mutation($pullRequestId: ID!) {
+                      enablePullRequestAutoMerge(
+                        input: {
+                          pullRequestId: $pullRequestId
+                          mergeMethod: SQUASH
+                        }
+                      ) {
+                        pullRequest {
+                          number
+                        }
+                      }
+                    }
+                  `,
+                  { pullRequestId: pullRequest.id }
+                );
+                core.info(`Enabled squash auto-merge for PR #${number}.`);
+                return;
+              } catch (error) {
+                const message = String(error.message || error);
+
+                if (/unstable status/i.test(message)) {
+                  if (attempt === maxAttempts) {
+                    failForTransientState(pullRequest);
+                    return;
+                  }
+
+                  core.info(
+                    `GitHub rejected auto-merge enablement for PR #${number} because the PR is still settling (${formatState(pullRequest)}). ` +
+                      `Retrying in ${Math.round(delayMs / 1000)}s (${attempt}/${maxAttempts}).`
+                  );
+                  await sleep(delayMs);
+                  continue;
+                }
+
+                if (/auto-merge|merge method|squash|not allowed|not enabled/i.test(message)) {
+                  failForSettings(message, pullRequest);
+                  return;
+                }
+
+                failForOther(message, pullRequest);
+                return;
+              }
             }
