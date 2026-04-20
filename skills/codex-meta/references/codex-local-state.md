@@ -49,11 +49,11 @@ When the task is “learn from prior Codex work,” use this order unless there 
 
 Start with the files that define current behavior:
 
-- `~/.codex/config.toml`
+- the relevant automation under `~/.codex/automations/` when the question is about recurring behavior
+- thread metadata and rollout summaries when the question is about inherited sandbox or approval posture
 - `~/.codex/hooks.json`
 - `~/.codex/agents/*.toml`
 - relevant skills under `~/.codex/skills/`
-- automations under `~/.codex/automations/`
 
 This tells you what behavior is current before you go spelunking through history.
 
@@ -83,6 +83,7 @@ Good uses:
 - map activity by date
 - see which cwd, model, sandbox, or approval posture a thread used
 - locate the raw rollout path for targeted follow-up
+- compare the thread metadata you expected with the project directory the automation actually touched
 
 ### 4. Targeted raw rollout inspection
 
@@ -100,6 +101,9 @@ Start with:
 - top-level event types
 - key shapes for `session_meta`, `turn_context`, `event_msg`, and `response_item`
 - targeted search by `thread_id`, `turn_id`, tool name, or event type
+- for automations or heartbeats, compare the opening `session_meta` with the exact later turn that actually ran
+- if a later turn shows unexpected writable roots or a different sandbox, first ask whether this was a thread heartbeat or a fresh project run before assuming config drift
+- inspect config files only if you need to explain or intentionally change the inherited boundary
 
 Avoid bulk-loading entire large rollout files unless there is no narrower path.
 
@@ -311,9 +315,10 @@ Start with:
 
 Start with:
 
-- current `config.toml`, hooks, agents, skills
+- rollout summaries
 - `threads` metadata in `state_5.sqlite`
 - targeted `turn_context` key inspection in raw rollout JSONL
+- only then config, hooks, agents, or skills if the behavior difference still points to setup rather than runtime inheritance
 
 ### “Was this a workflow mistake, a prompt issue, or an environment issue?”
 

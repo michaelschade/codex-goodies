@@ -32,7 +32,7 @@ Before recommending repo- or machine-scoped changes, inspect the relevant live s
 
 Start with:
 
-- `~/.codex/config.toml`
+- the active runtime surface when the question is thread-, automation-, or sandbox-scoped
 - `~/.codex/hooks.json`
 - `~/.codex/agents/*.toml`
 - directly relevant local skills under `~/.codex/skills/`
@@ -88,6 +88,7 @@ Choose the primary docs-and-surface question first. Keep the work anchored on se
 ### 2. Inspect the relevant local setup
 
 - inspect the current local setup before recommending repository-scoped or machine-scoped changes
+- for automation, sandbox, or approval questions, first identify whether the work is thread-attached or a fresh project run and what posture that surface inherits by default
 - use only the surfaces that materially change the recommendation
 - keep incidental local context out of any public-bound guidance
 
