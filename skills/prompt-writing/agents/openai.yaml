@@ -1,7 +1,7 @@
 interface:
   display_name: "Prompt Writing"
   short_description: "Write and repair serious prompts"
-  default_prompt: "Use $prompt-writing to write or repair a non-trivial system prompt, developer prompt, reusable task prompt, or tool-using prompt. Fit the prompt to its real runtime and caller contract, preserve working lines when repairing an existing prompt, prefer one strong prompt over many variants, and step back to a broader workflow recommendation when repeated prompt tweaks are not fixing the real issue. Load `references/prompt-patterns.md` only when deeper scaffolds or repair recipes are actually needed."
+  default_prompt: "Use $prompt-writing to write or repair a non-trivial system prompt, developer prompt, reusable task prompt, or tool-using prompt. Fit the prompt to its real runtime, execution surface, and caller contract, preserve working lines when repairing an existing prompt, prefer one strong prompt over many variants, and step back to a broader workflow recommendation when repeated prompt tweaks are not fixing the real issue. If the hard part is choosing between hooks, skills, subagents, automations, or another Codex surface, use $codex-meta. Load `references/prompt-patterns.md` only when deeper scaffolds or repair recipes are actually needed."
 
 policy:
   allow_implicit_invocation: true

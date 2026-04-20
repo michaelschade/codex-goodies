@@ -5,7 +5,9 @@ description: "Use when the user wants a serious prompt written, repaired, or cri
 
 # Prompt Writing
 
-Use this skill for prompt authoring and prompt repair.
+Use this skill for prompt authoring and prompt repair once the runtime or Codex surface is already clear.
+
+If the hard part is deciding whether behavior belongs in a prompt, skill, hook, subagent, automation, or another Codex surface, use `$codex-meta` first.
 
 Keep this file lean. Load deeper references only when they are actually needed:
 
@@ -22,17 +24,20 @@ Keep this file lean. Load deeper references only when they are actually needed:
 
 ## Core rules
 
-### 1. Match the runtime and caller contract
+### 1. Match the runtime, surface, and caller contract
 
 Before writing or revising a prompt, decide:
 
 - where it will run
+- which runtime or Codex surface will own it
+- what that runtime or surface already provides
 - what context the caller will already provide
 - what answer shape the caller expects back
 
 Then:
 
-- include only the context that materially changes behavior in that runtime
+- include only the context that materially changes behavior in that runtime or surface
+- for Codex-specific prompts, name only the hooks, skills, subagents, automations, or tool behavior that the target surface actually has
 - cut incidental repo names, session artifacts, and irrelevant internal context
 - do not rely on ambient context that will not really exist when the prompt runs
 
@@ -48,6 +53,7 @@ Then:
 - Prefer a small number of high-leverage instructions over long keyword piles.
 - Move repeated stable behavior to the right surface instead of restating it in prompts.
 - If several prompt revisions keep missing the goal, step back and diagnose whether the real issue is surface choice, missing context, invocation shape, tool design, or evaluation.
+- If the prompt keeps absorbing decisions about hooks, skills, subagents, automations, or config, the problem has become surface choice rather than prompt wording.
 - If the current fix depends on semantic prompt parsing, keyword heuristics, or guessed workflow phases, that is usually evidence the fix belongs somewhere else.
 
 ### 4. Use model families and modalities intentionally
@@ -65,6 +71,7 @@ Choose one primary prompt task first. Keep the work anchored on the prompt artif
 
 - existing prompt repair
 - fresh prompt authoring
+- context-fit repair for an already chosen runtime or Codex surface
 - workflow recommendation disguised as a prompt problem
 - specialized-family prompting, such as realtime or image generation
 
@@ -82,6 +89,7 @@ Choose one primary prompt task first. Keep the work anchored on the prompt artif
 
 - If the draft keeps growing without improving the outcome, diagnose whether the issue is missing context, caller contract, tool design, or evaluation.
 - Say plainly when another prompt rewrite will not solve the failure mode.
+- If the real question is how Codex itself should be structured across prompts, skills, hooks, subagents, or automations, use `$codex-meta`.
 - Keep the prompt deliverable clean even when the surrounding diagnosis reaches beyond wording.
 
 ## Specialized modalities

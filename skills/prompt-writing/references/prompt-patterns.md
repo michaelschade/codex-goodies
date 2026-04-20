@@ -63,13 +63,15 @@ Useful when a prompt is longer, more agentic, or needs precise named sections:
 - Do not use tags just because they look advanced; use them when they make the prompt easier to follow.
 - Keep one prompt internally consistent instead of mixing too many structural styles.
 
-## 1.5 Execution-context check
+## 1.5 Execution-context and surface check
 
 Before writing the prompt, answer this:
 
 - Is this prompt meant for Codex specifically?
 - Is it meant for some other known harness?
 - Or should it run well in isolation?
+- If it is Codex-specific, which surface will carry it: a direct prompt, hook text, skill guidance, subagent brief, or automation prompt?
+- What does that surface already provide, and what would be duplicated if repeated here?
 - What context will the caller provide versus what must the prompt say explicitly?
 - What answer shape does the caller need back?
 
@@ -83,6 +85,8 @@ If it is Codex-specific:
 
 - it can name Codex surfaces and tool behavior
 - but only include the harness details that materially change behavior
+- do not drag surface-choice debates into the prompt when the real problem is architectural
+- if the hard part is choosing between hooks, skills, subagents, or automation, use `$codex-meta`
 
 ## 2. Prompt surgery checklist
 
@@ -96,9 +100,9 @@ Use when repairing an existing prompt.
 - Prefer a small number of strong edits over a full rewrite.
 - If the prompt keeps growing while the core issue stays the same, recommend a workflow fix instead.
 
-## 3. Fresh Codex-style prompt scaffold
+## 3. Fresh harness-aware prompt scaffold
 
-Use when writing a new non-trivial Codex prompt.
+Use when writing a new non-trivial prompt after the execution surface is already chosen.
 
 ```text
 Role:
@@ -120,9 +124,9 @@ Tools:
 - Do not use [tool] for [cases].
 
 Workflow:
-- Inspect relevant local context before recommending changes.
-- Batch reads/searches when possible.
+- Gather only the context needed to act safely.
 - Keep going until the task is actually complete.
+- Verify the key postconditions before finishing.
 
 Done when:
 - [clear completion bar]
@@ -236,35 +240,14 @@ What should live in prompts vs skills vs agents vs automation:
 Current-doc caveats:
 ```
 
-## 5.25 Hook smell test
+## 5.25 Surface-boundary check
 
-Use this before proposing a hook-based fix.
+Use this when the prompt keeps absorbing Codex-system design decisions.
 
-- Prefer hooks for concise context injection, lifecycle plumbing, or crisp objective guardrails.
-- If the idea depends on parsing prompt wording, keyword buckets, heuristic scores, or guessed workflow phases, stop and reconsider the surface.
-- If the behavior needs nuanced judgment, put it in model-facing instructions, skill guidance, agent design, or the evaluation loop instead.
-- If a hook script keeps growing to repair model behavior, that is evidence to step back and rethink the broader approach.
+- If the hard part is choosing where behavior belongs across hooks, skills, subagents, config, or automation, stop editing the prompt and use `$codex-meta`.
+- Once the surface is chosen, come back here to draft or repair the wording.
 
-## 6. Skill-authoring checklist
-
-- one job, not many
-- 2 to 3 concrete use cases
-- description says what it does and when to use it
-- trigger phrases sound like real user language
-- lean `SKILL.md`
-- references for depth
-- scripts only when reliability justifies them
-
-## 7. Subagent-authoring checklist
-
-- one clear job
-- matching tool surface
-- explicit ownership boundary
-- anti-drift instructions
-- no unnecessary taxonomy explosion
-- narrow and opinionated beats broad and vague
-
-## 8. Prompt-repair meta prompt
+## 6. Prompt-repair meta prompt
 
 Use this when the user wants GPT-5 to repair a prompt with minimal edits.
 
@@ -286,7 +269,7 @@ While keeping as much of the existing prompt intact as possible:
 5. If the failure is not primarily a prompt problem, say what should change instead.
 ```
 
-## 8.5 Step-back meta prompt
+## 6.5 Step-back meta prompt
 
 Use this when repeated prompt tweaks are not fixing the outcome.
 
@@ -310,7 +293,7 @@ Step back and rethink the problem.
 5. Only provide a revised prompt if prompt wording is actually the main issue.
 ```
 
-## 9. Specialized family notes
+## 7. Specialized family notes
 
 ### Realtime
 
