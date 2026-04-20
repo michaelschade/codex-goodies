@@ -1,7 +1,0 @@
-interface:
-  display_name: "Codex Docs"
-  short_description: "Choose the right Codex surface"
-  default_prompt: "Use $codex-docs when the user needs Codex workflow design, docs-guided guidance, or a decision about hooks, skills, subagents, AGENTS.md, config, automation, codex exec, the SDK, App Server, or GitHub Action. Inspect the current local Codex setup before recommending local changes, prefer the smallest safe surface instead of prompt bloat, keep hooks thin, treat local ~/.codex findings as approval-gated for public-bound documentation, and load `references/codex-system.md`, `references/codex-programmatic.md`, or `references/codex-local-state.md` only when the hard part actually needs them."
-
-policy:
-  allow_implicit_invocation: true
