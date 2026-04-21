@@ -102,6 +102,52 @@ The distinctions that matter:
 
 Do not spend much design energy on the UI surface itself unless the request is specifically about the client experience. Spend it on the workflow contract and the layer that should own behavior.
 
+### Desktop deeplinks
+
+Desktop deeplinks are a small but high-leverage part of the app surface. They let Codex send a user back into Codex at the right place instead of only describing where to click.
+
+Use them when the next useful step is:
+
+- opening a specific built-in Codex surface such as settings, skills, or automation creation
+- handing off from an external message, doc, or automation result into a fresh Codex chat
+- making Codex feel self-aware in follow-up instructions, status updates, or "click here to continue" guidance
+
+Prefer deeplinks when the user benefits from a direct jump. Prefer prose-only guidance when the destination is unclear or would depend on guessed identifiers.
+
+Confirmed non-sensitive shapes to use in the current desktop app:
+
+- `codex://settings`
+  Opens the desktop settings surface.
+- `codex://skills`
+  Opens the skills surface.
+- `codex://automations`
+  Opens the automations surface in create mode.
+- `codex://threads/new`
+  Opens a fresh chat. Prefer this as the default "new chat" deeplink because it is valid with or without query params.
+- `codex://new?prompt=...&originUrl=...&path=...`
+- `codex://threads/new?prompt=...&originUrl=...&path=...`
+  Both accepted shapes create a new chat and may prefill context.
+
+Parameter meaning for new-chat deeplinks:
+
+- `prompt`
+  A content hint. It prefills the composer.
+- `path`
+  A routing hint, not an identifier. Use it when you know a local directory that should become the prefilled cwd. It only works if the path resolves to an existing directory.
+- `originUrl`
+  A routing hint, not an identifier. Use it when you know the repo remote or origin URL but do not want to guess a machine-specific path. The app uses it to match a known workspace by exact origin or repo identity.
+
+Practical guidance:
+
+- Prefer `codex://threads/new?...` in examples and generated links. Bare `codex://new` is not accepted without at least one non-empty query param, while bare `codex://threads/new` is.
+- Use the smallest stable link that gets the user where they need to go.
+- Do not invent hidden params. For the public contract here, only rely on `prompt`, `path`, and `originUrl`.
+- If you do not know a safe local path, prefer `originUrl` over guessing one.
+- Use literal deeplinks in handoffs when that makes the next step obvious, for example:
+  - `codex://automations`
+  - `codex://skills`
+  - `codex://threads/new?prompt=Draft%20the%20follow-up%20summary&originUrl=https%3A%2F%2Fgithub.com%2Fowner%2Frepo`
+
 ### Integrations and cloud
 
 Integrations matter because they move Codex to where work already happens.
