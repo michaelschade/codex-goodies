@@ -1,6 +1,6 @@
 ---
 name: "codex-meta"
-description: "Use when the user wants to understand, design, or improve Codex itself: hooks, subagents, skills, AGENTS.md or PLANS.md guidance, config-aware workflow design, Codex docs navigation, or deciding when to use codex exec, the SDK, App Server, GitHub Action, or automation. Inspect the current local Codex setup before recommending repo- or machine-scoped changes."
+description: "Use when the user wants to understand, design, or improve Codex itself: hooks, subagents, skills, AGENTS.md or PLANS.md guidance, desktop deeplink routing, config-aware workflow design, Codex docs navigation, or deciding when to use codex exec, the SDK, App Server, GitHub Action, or automation. Inspect the current local Codex setup before recommending repo- or machine-scoped changes."
 ---
 
 # Codex Meta
@@ -11,7 +11,7 @@ Use it when the hard part is not just wording, but how Codex surfaces such as ho
 
 Keep this file lean. Load deeper references only when they are actually needed:
 
-- [references/codex-system.md](references/codex-system.md) for surface choice, hooks, subagents, memories, config, and grouped doc scaffolding
+- [references/codex-system.md](references/codex-system.md) for surface choice, hooks, subagents, desktop deeplinks, memories, config, and grouped doc scaffolding
 - [references/codex-programmatic.md](references/codex-programmatic.md) for `codex exec`, the SDK, App Server, GitHub Action, and embedded or CI Codex workflows
 - [references/codex-local-state.md](references/codex-local-state.md) for privacy-safe self-inspection of local Codex sessions, rollouts, memories, logs, automations, and SQLite state
 
@@ -19,6 +19,7 @@ Keep this file lean. Load deeper references only when they are actually needed:
 
 - hooks, subagents, skills, `AGENTS.md`, `PLANS.md`, and Codex workflow design
 - prompting or documenting Codex-specific surfaces such as hooks, skills, subagents, or automations when the surface itself is the design question
+- desktop self-linking and deeplink design when Codex should open its own settings, skills, automations, or a new chat with prefilled context
 - deciding what belongs in prompts versus Codex surfaces
 - docs-guided recommendations about current Codex capabilities, surfaces, and setup
 - deciding when a workflow should move into `codex exec`, the SDK, App Server, GitHub Action, or automation
@@ -33,6 +34,7 @@ Before recommending repo- or machine-scoped changes, inspect the relevant live s
 Start with:
 
 - the active runtime surface when the question is thread-, automation-, or sandbox-scoped
+- the installed desktop client when the question is about `codex://` deeplinks or app-local routing behavior
 - `~/.codex/hooks.json`
 - `~/.codex/agents/*.toml`
 - directly relevant local skills under `~/.codex/skills/`
