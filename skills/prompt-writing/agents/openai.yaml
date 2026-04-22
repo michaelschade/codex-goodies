@@ -1,7 +1,7 @@
 interface:
   display_name: "Prompt Writing"
   short_description: "Write and repair prompts that carry the work"
-  default_prompt: "Use $prompt-writing when the task is to write, repair, or critique a prompt for a known runtime, stage, model family, or modality. Good fits include system prompts, developer prompts, reusable task prompts, tool-using or reasoning-model prompts, image prompts, realtime prompts, and minimal prompt surgery after a specific failure mode. Use it when prompt wording, structure, and output contract are the main levers."
+  default_prompt: "Use $prompt-writing when the task is to write, repair, or critique a prompt for a known runtime, stage, model family, or modality. Good fits include system prompts, developer prompts, reusable task prompts, tool-using or reasoning-model prompts, image prompts, realtime prompts, turning example feedback into reusable prompt guidance, and minimal prompt surgery after a specific failure mode. Use it when prompt wording, structure, and output contract are the main levers."
 
 policy:
   allow_implicit_invocation: true

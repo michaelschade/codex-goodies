@@ -62,6 +62,26 @@ Verification:
 
 Patch the behavior directly. Do not rewrite a full prompt just to add one exploration, verbosity, or completion rule.
 
+## Example-feedback generalization
+
+Use when the prompt failed on one example but is meant for broader use.
+
+```text
+Observed example failure:
+
+Durable failure mode:
+
+True invariants:
+
+Incidental details to avoid copying:
+
+Generalized rule:
+
+Acceptance check:
+```
+
+Keep this shape short. The point is to extract the reusable rule, not archive the whole failing case.
+
 ## Discovery prompt
 
 Use when the next stage needs findings, not a polished report.

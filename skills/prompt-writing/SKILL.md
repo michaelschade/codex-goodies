@@ -1,6 +1,6 @@
 ---
 name: "prompt-writing"
-description: "Use when the user wants a prompt written, repaired, or critiqued for a known runtime, stage, model family, or modality: system prompts, developer prompts, reusable task prompts, tool-using or reasoning-model prompts, image prompts, realtime prompts, or minimal-edit prompt surgery after a specific failure mode. Fit the prompt to the real runtime and caller contract, keep it concise, and diagnose when wording is not the real issue."
+description: "Use when the user wants a prompt written, repaired, or critiqued for a known runtime, stage, model family, or modality: system prompts, developer prompts, reusable task prompts, tool-using or reasoning-model prompts, image prompts, realtime prompts, or minimal-edit prompt surgery after a specific failure mode. Fit the prompt to the real runtime and caller contract, keep it concise, generalize from example feedback, and diagnose when wording is not the real issue."
 ---
 
 # Prompt Writing
@@ -57,7 +57,15 @@ Then:
 - For reasoning-model prompts, steer exploration depth, tool boundaries, and stopping conditions rather than narrating every thought step.
 - Use examples only when zero-shot instructions are not enough or the output pattern is unusually specific.
 
-### 3. Keep prompts short enough to stay legible
+### 3. Generalize from example feedback
+
+- Treat individual failures as evidence of a broader behavior gap.
+- Extract the durable intent, constraint, or acceptance bar before editing the prompt.
+- Do not paste in every concrete detail from the failing example unless those details are true invariants.
+- Prefer a reusable rule over a case-specific patch.
+- Rely on the target runtime's existing context instead of re-teaching procedures it already supplies.
+
+### 4. Keep prompts short enough to stay legible
 
 - A shorter prompt is often the stronger one if each line changes behavior.
 - Delete scene-setting, repeated caveats, and authoring-session artifacts.
@@ -65,14 +73,14 @@ Then:
 - Keep one place for each important rule instead of repeating it in softer words.
 - Use headings or tags only when they make the contract easier to follow.
 
-### 4. Repair surgically
+### 5. Repair surgically
 
 - Preserve the lines that are already pulling their weight.
 - Diagnose the actual failure mode before rewriting.
 - Prefer the smallest change likely to fix the behavior.
 - Write a second variant only when there is a real tradeoff.
 
-### 5. Do not patch structural problems with prose
+### 6. Do not patch structural problems with prose
 
 - If the failure is ownership, routing, missing context, tool shape, or evaluation, fix that contract first.
 - If the prompt keeps absorbing architecture or workflow decisions, stop and solve that problem before editing the wording again.

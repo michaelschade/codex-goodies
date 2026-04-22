@@ -12,6 +12,7 @@ Ask what is actually failing:
 - skipped prerequisites or verification
 - uncontrolled exploration or tool use
 - weak persistence or completion behavior
+- overfitting to one example or run
 - model setting or migration mismatch
 - too much prose
 - wrong runtime or task stage
@@ -56,6 +57,13 @@ Add only the minimum needed to fix the failure after that cleanup.
 - make dependency checks explicit
 - say what must be verified before acting
 
+### When feedback is from one example
+
+- name the durable failure mode
+- separate true invariants from incidental details
+- add the acceptance bar, not the whole example
+- rely on existing runtime context instead of restating procedures
+
 ### When a reasoning model over-explores
 
 - define what evidence is enough to proceed
@@ -98,6 +106,7 @@ Before returning a revised prompt, check:
 
 - Did I keep the lines that were already working?
 - Did I make the smallest change likely to fix the failure?
+- Did I generalize from the example instead of overfitting to it?
 - Did I remove more noise than I added?
 - Is the new contract clearer about success, constraints, or verification?
 - If this is a reasoning-model issue, did I tune exploration, verbosity, tool policy, or settings instead of adding generic process?
@@ -117,10 +126,11 @@ Observed failure:
 
 Keep as much of the existing prompt intact as possible.
 1. Identify the smallest set of changes likely to fix the failure.
-2. Explain why each change helps.
-3. Return one revised prompt.
-4. Return a second variant only if there is a real tradeoff.
-5. If this is not primarily a prompt problem, say what should change instead.
+2. Separate durable rules from incidental example details.
+3. Explain why each change helps.
+4. Return one concise revised prompt.
+5. Return a second variant only if there is a real tradeoff.
+6. If this is not primarily a prompt problem, say what should change instead.
 ```
 
 ## 7. Step-back test
