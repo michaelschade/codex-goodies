@@ -10,6 +10,9 @@ Ask what is actually failing:
 - weak constraints
 - weak output contract
 - skipped prerequisites or verification
+- uncontrolled exploration or tool use
+- weak persistence or completion behavior
+- model setting or migration mismatch
 - too much prose
 - wrong runtime or task stage
 - not really a prompt problem at all
@@ -53,11 +56,36 @@ Add only the minimum needed to fix the failure after that cleanup.
 - make dependency checks explicit
 - say what must be verified before acting
 
+### When a reasoning model over-explores
+
+- define what evidence is enough to proceed
+- add one escalation rule, not unlimited searching
+- say when internal knowledge is acceptable versus when tools are required
+
+### When a reasoning model stops early
+
+- add a completion contract
+- mark blocked items explicitly instead of silently dropping them
+- add one verification pass before finalizing
+
+### When verbosity is wrong
+
+- separate user-facing updates from final-answer detail
+- set length or structure by section
+- preserve required evidence, caveats, and verification even when asking for brevity
+
 ### When the prompt feels bloated
 
 - collapse repeated rules
 - turn long prose into a short contract
 - remove sections that are not changing behavior
+
+### When a model migration changed behavior
+
+- restore the old prompt first
+- pin the relevant model settings
+- run a baseline on representative cases
+- tune only the smallest failing behavior
 
 ### When the failure is structural
 
@@ -72,6 +100,7 @@ Before returning a revised prompt, check:
 - Did I make the smallest change likely to fix the failure?
 - Did I remove more noise than I added?
 - Is the new contract clearer about success, constraints, or verification?
+- If this is a reasoning-model issue, did I tune exploration, verbosity, tool policy, or settings instead of adding generic process?
 - If this is not really a prompt problem, did I say so plainly?
 
 ## 6. Minimal repair meta prompt

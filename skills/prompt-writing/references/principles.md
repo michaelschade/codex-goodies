@@ -25,6 +25,7 @@ If the prompt is for discovery:
 - Say what must happen, what must not happen, and how the result should be checked.
 - Do not narrate every obvious thinking step just because the task is important.
 - If there are real constraints, say them directly.
+- If the model is already capable, tune exploration, output shape, and stopping conditions before adding more step-by-step process.
 
 Examples of high-leverage instructions:
 
@@ -52,7 +53,7 @@ Cut:
 ## 4. Use structure deliberately
 
 - Markdown headings are enough for most prompts.
-- Tags are useful when you need explicit boundaries, reusable sections, or metadata.
+- Tags are useful when you need explicit boundaries, reusable sections, or blocks that other rules refer to.
 - Not every prompt needs every section.
 - Keep one place for each important rule.
 - Pick structure after you know the intent; do not let the template decide what matters.
@@ -68,7 +69,18 @@ Sections that often earn their keep:
 
 Context often belongs near the end when it varies per request and the stable instructions belong earlier.
 
-## 5. Make the contract explicit
+## 5. Choose the right control lever
+
+Before adding prose, decide which lever actually changes the behavior:
+
+- prompt text for goals, constraints, output shape, examples, and verification
+- model settings for latency, reasoning depth, verbosity, and cost tradeoffs
+- runtime or tool design for missing context, unavailable state, awkward routing, or unsafe side effects
+- evals or examples when repeated edits are being judged by taste instead of evidence
+
+If the fix is really a setting, integration, tool contract, or eval gap, do not hide that inside a longer prompt.
+
+## 6. Make the contract explicit
 
 When correctness matters, make these concrete:
 
@@ -86,7 +98,7 @@ Useful contract patterns:
 - prerequisite checks before later actions
 - output rules that are tight enough to consume downstream
 
-## 6. Use examples as leverage, not filler
+## 7. Use examples as leverage, not filler
 
 - Try zero-shot instructions first.
 - Add examples only when the output pattern is hard to infer or zero-shot has failed.

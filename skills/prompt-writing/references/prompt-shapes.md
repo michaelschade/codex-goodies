@@ -29,16 +29,38 @@ Goal:
 
 Relevant context:
 
-Tool rules:
+Tool policy:
+
+Exploration boundary:
 
 Constraints:
+
+Completion bar:
 
 Verification:
 
 Output:
 ```
 
-Good tool prompts usually need fewer steps and stronger boundaries. Name what must be checked, what must not be touched, and what counts as complete.
+Good tool prompts usually need fewer steps and stronger boundaries. Name when tools are required, when they are not, what evidence is enough, what must not be touched, and what counts as complete.
+
+## Reasoning-model behavior patch
+
+Use when the prompt mostly works, but a reasoning model is too eager, too terse, too verbose, or not persistent enough.
+
+```text
+Observed failure:
+
+Keep unchanged:
+
+Behavior change:
+
+Boundary or stop rule:
+
+Verification:
+```
+
+Patch the behavior directly. Do not rewrite a full prompt just to add one exploration, verbosity, or completion rule.
 
 ## Discovery prompt
 

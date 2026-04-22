@@ -1,6 +1,6 @@
 ---
 name: "prompt-writing"
-description: "Use when the user wants a prompt written, repaired, or critiqued for a known runtime, stage, or modality: system prompts, developer prompts, reusable task prompts, tool-using prompts, image prompts, realtime prompts, or minimal-edit prompt surgery after a specific failure mode. Fit the prompt to the real runtime and caller contract, keep it concise, and diagnose when wording is not the real issue."
+description: "Use when the user wants a prompt written, repaired, or critiqued for a known runtime, stage, model family, or modality: system prompts, developer prompts, reusable task prompts, tool-using or reasoning-model prompts, image prompts, realtime prompts, or minimal-edit prompt surgery after a specific failure mode. Fit the prompt to the real runtime and caller contract, keep it concise, and diagnose when wording is not the real issue."
 ---
 
 # Prompt Writing
@@ -10,6 +10,7 @@ Use this skill when the deliverable is a prompt and the runtime or surface is al
 Keep this file lean. Load deeper references only when they are actually needed:
 
 - [references/principles.md](references/principles.md) for cross-runtime prompt principles
+- [references/reasoning-models.md](references/reasoning-models.md) for GPT-5-class, reasoning-model, and tool-heavy prompt behavior
 - [references/repair.md](references/repair.md) for prompt surgery and step-back tests
 - [references/prompt-shapes.md](references/prompt-shapes.md) for compact prompt shapes and when to use them
 - [references/modalities/image-generation.md](references/modalities/image-generation.md) for image-prompt structure and examples
@@ -21,6 +22,7 @@ Keep this file lean. Load deeper references only when they are actually needed:
 - developer prompts
 - reusable task prompts
 - tool-using prompts
+- reasoning-model prompts where exploration depth, verbosity, persistence, or settings matter
 - image-generation prompts once the output type and constraints are known
 - realtime or voice prompts once the interaction surface is known
 - prompt critique
@@ -52,6 +54,7 @@ Then:
 - Make the end goal explicit.
 - Name the hard constraints and things to avoid.
 - Add self-checks, completion bars, or verification rules when correctness matters.
+- For reasoning-model prompts, steer exploration depth, tool boundaries, and stopping conditions rather than narrating every thought step.
 - Use examples only when zero-shot instructions are not enough or the output pattern is unusually specific.
 
 ### 3. Keep prompts short enough to stay legible
@@ -90,6 +93,7 @@ Keep the work anchored on the prompt artifact and the behavior it needs to produ
 ### 2. Load only the reference you need
 
 - Load [references/principles.md](references/principles.md) for stage-fit, context-fit, brevity, and structure.
+- Load [references/reasoning-models.md](references/reasoning-models.md) when the prompt targets GPT-5-class or other reasoning/tool-heavy models and behavior tuning is central.
 - Load [references/repair.md](references/repair.md) when repairing an existing prompt or deciding whether prompt edits should stop.
 - Load [references/prompt-shapes.md](references/prompt-shapes.md) when you need a compact shape for a specific kind of prompt.
 - Load a modality file only when the prompt is genuinely for that modality.
