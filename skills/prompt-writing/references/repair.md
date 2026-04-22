@@ -22,11 +22,11 @@ Do not rewrite the whole prompt until the failure mode is named.
 - Remove duplicated rules and weaker restatements.
 - Keep stable terminology that the caller or runtime already depends on.
 
-## 3. Delete before you add
+## 3. Bias toward removing and refining before adding
 
 Many weak prompts fail because they are too long, not because they are too short.
 
-Delete:
+First look for:
 
 - scene-setting
 - repeated caveats
@@ -34,7 +34,7 @@ Delete:
 - examples that do not pull their weight
 - process narration that does not change behavior
 
-Add only the minimum needed to fix the failure.
+Add only the minimum needed to fix the failure after that cleanup.
 
 ## 4. Common repair moves
 
@@ -64,7 +64,7 @@ Add only the minimum needed to fix the failure.
 - stop editing the prompt
 - name the real issue: ownership, routing, missing context, tool shape, or evaluation
 
-## 5. Repair checklist
+## 5. Repair review questions
 
 Before returning a revised prompt, check:
 

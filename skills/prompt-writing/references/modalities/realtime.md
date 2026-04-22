@@ -29,7 +29,7 @@ Realtime prompts are not just text prompts with audio attached. They need to sur
 - Make the confirmation policy explicit.
 - If the application is extending an existing text agent into voice, add the spoken-interaction rules rather than copying the whole prompt unchanged.
 
-## 4. Realtime scaffold
+## 4. Realtime shape
 
 ```text
 Role and voice:

@@ -11,7 +11,7 @@ Keep this file lean. Load deeper references only when they are actually needed:
 
 - [references/principles.md](references/principles.md) for cross-runtime prompt principles
 - [references/repair.md](references/repair.md) for prompt surgery and step-back tests
-- [references/scaffolds.md](references/scaffolds.md) for short prompt shapes you can adapt
+- [references/prompt-shapes.md](references/prompt-shapes.md) for compact prompt shapes and when to use them
 - [references/modalities/image-generation.md](references/modalities/image-generation.md) for image-prompt structure and examples
 - [references/modalities/realtime.md](references/modalities/realtime.md) for live-interaction prompt structure
 
@@ -91,7 +91,7 @@ Keep the work anchored on the prompt artifact and the behavior it needs to produ
 
 - Load [references/principles.md](references/principles.md) for stage-fit, context-fit, brevity, and structure.
 - Load [references/repair.md](references/repair.md) when repairing an existing prompt or deciding whether prompt edits should stop.
-- Load [references/scaffolds.md](references/scaffolds.md) when you need a short starting shape.
+- Load [references/prompt-shapes.md](references/prompt-shapes.md) when you need a compact shape for a specific kind of prompt.
 - Load a modality file only when the prompt is genuinely for that modality.
 
 ### 3. Draft or repair once, then reassess

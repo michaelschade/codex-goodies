@@ -2,10 +2,11 @@
 
 Load this file when you need the core authoring rules for a prompt.
 
-## 1. Start with stage and contract
+## 1. Start with intent, stage, and contract
 
 Before writing, answer these:
 
+- What is the prompt trying to make easier, safer, or more reliable?
 - Is this prompt for discovery, execution, reporting, or handoff?
 - Where will it run?
 - What context does that runtime already provide?
@@ -54,8 +55,9 @@ Cut:
 - Tags are useful when you need explicit boundaries, reusable sections, or metadata.
 - Not every prompt needs every section.
 - Keep one place for each important rule.
+- Pick structure after you know the intent; do not let the template decide what matters.
 
-Common sections that earn their keep:
+Sections that often earn their keep:
 
 - `Goal`
 - `Context`
@@ -90,3 +92,4 @@ Useful contract patterns:
 - Add examples only when the output pattern is hard to infer or zero-shot has failed.
 - Keep examples representative and close to the actual task.
 - If examples and instructions disagree, the prompt gets weaker, not stronger.
+- Use examples to reveal taste, judgment, format, or failure boundaries; do not add them just to make the prompt feel thorough.
