@@ -61,10 +61,10 @@ jobs:
               return `mergeable=${pullRequest.mergeable}, mergeStateStatus=${pullRequest.mergeStateStatus}`;
             }
 
-            function failForTransientState(pullRequest) {
+            function failForTransientError(pullRequest) {
               core.setFailed(
-                `Could not enable auto-merge for PR #${number} because GitHub kept reporting a transient merge state after ${maxAttempts} attempts over ${Math.round((maxAttempts - 1) * delayMs / 1000)}s (${formatState(pullRequest)}). ` +
-                  `This usually means GitHub had not settled the PR yet, not that the repository settings are wrong. Re-run the workflow once the PR is stable; if the retry still fails, then verify the repository settings in docs/repo-settings.md.`
+                `Could not enable auto-merge for PR #${number} because GitHub kept rejecting the request as a transient merge state after ${maxAttempts} attempts over ${Math.round((maxAttempts - 1) * delayMs / 1000)}s (${formatState(pullRequest)}). ` +
+                  `This usually means GitHub had not settled the PR yet, not that the repository settings are wrong. Re-run the workflow after the PR stabilizes; if the retry still fails, then verify the repository settings in docs/repo-settings.md.`
               );
             }
 
@@ -92,20 +92,6 @@ jobs:
                 return;
               }
 
-              if (['UNKNOWN', 'UNSTABLE'].includes(pullRequest.mergeStateStatus)) {
-                if (attempt === maxAttempts) {
-                  failForTransientState(pullRequest);
-                  return;
-                }
-
-                core.info(
-                  `PR #${number} is not stable enough to arm auto-merge yet (${formatState(pullRequest)}). ` +
-                    `Retrying in ${Math.round(delayMs / 1000)}s (${attempt}/${maxAttempts}).`
-                );
-                await sleep(delayMs);
-                continue;
-              }
-
               try {
                 await github.graphql(
                   `
@@ -131,7 +117,7 @@ jobs:
 
                 if (/unstable status/i.test(message)) {
                   if (attempt === maxAttempts) {
-                    failForTransientState(pullRequest);
+                    failForTransientError(pullRequest);
                     return;
                   }
 
